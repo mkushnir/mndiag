@@ -81,19 +81,23 @@ extern "C" {
 /*
  * Library codes
  */
-#define MNDIAG_LIBRARY_MRKCOMMON (0x08)
-#define MNDIAG_LIBRARY_MRKL4C    (0x09)
-#define MNDIAG_LIBRARY_MRKYAML   (0x0a)
-#define MNDIAG_LIBRARY_MNMATH    (0x0b)
-#define MNDIAG_LIBRARY_MRKTHR    (0x10)
-#define MNDIAG_LIBRARY_MRKAPP    (0x11)
-#define MNDIAG_LIBRARY_MRKAMQP   (0x12)
-#define MNDIAG_LIBRARY_MRKPQ     (0x13)
-#define MNDIAG_LIBRARY_MNREDIS   (0x14)
-#define MNDIAG_LIBRARY_MNFCGI    (0x15)
-#define MNDIAG_LIBRARY_QWE       (0xf0)
+#define MNDIAG_LIBRARY_MRKCOMMON    (0x08)
+#define MNDIAG_LIBRARY_MRKL4C       (0x09)
+#define MNDIAG_LIBRARY_MRKYAML      (0x0a)
+#define MNDIAG_LIBRARY_MNMATH       (0x0b)
+#define MNDIAG_LIBRARY_MRKTHR       (0x10)
+#define MNDIAG_LIBRARY_MRKAPP       (0x11)
+#define MNDIAG_LIBRARY_MRKAMQP      (0x12)
+#define MNDIAG_LIBRARY_MRKPQ        (0x13)
+#define MNDIAG_LIBRARY_MNREDIS      (0x14)
+#define MNDIAG_LIBRARY_MNFCGI       (0x15)
+#define MNDIAG_LIBRARY_MNHTOOLS     (0x16)
+#define MNDIAG_LIBRARY_MRKSVNUP     (0x17)
+#define MNDIAG_LIBRARY_SPINFO       (0x18)
+#define MNDIAG_LIBRARY_MRKLKIT      (0x19)
+#define MNDIAG_LIBRARY_QWE          (0xf0)
 
-#define MNDIAG_LIBRARY_OTHER     (0xff)
+#define MNDIAG_LIBRARY_OTHER        (0xff)
 
 
 typedef struct _mndiag_code_info {
