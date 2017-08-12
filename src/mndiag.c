@@ -1,7 +1,7 @@
 #include "mndiag_private.h"
 
 #define REGCODES_INITIALIZER(n, c) {n, #c, c}
-__attribute__((unused)) static mndiag_code_info_t registered_libraries[] = {
+static mndiag_code_info_t registered_libraries[] = {
     REGCODES_INITIALIZER("mrkcommon", MNDIAG_LIBRARY_MRKCOMMON),
     REGCODES_INITIALIZER("mrkl4c", MNDIAG_LIBRARY_MRKL4C),
     REGCODES_INITIALIZER("mrkyaml", MNDIAG_LIBRARY_MRKYAML),

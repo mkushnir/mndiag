@@ -4,6 +4,7 @@
 #include <libgen.h>
 #include <signal.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #ifdef HAVE_MALLOC_H
@@ -13,7 +14,7 @@
 #include <mrkcommon/dumpm.h>
 #include <mrkcommon/util.h>
 
-#include "diag.h"
+#define FAIL(s) do {perror(s); abort(); } while (0)
 
 #ifndef NDEBUG
 const char *_malloc_options = "AJ";
