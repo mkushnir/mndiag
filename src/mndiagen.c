@@ -308,7 +308,11 @@ clist_write(const char *lib,
     fprintf(coutfp, "    const char *cname;\n");
     fprintf(coutfp, "    int message;\n");
     fprintf(coutfp, "    lib = mndiag_library_name(MNDIAG_GET_LIBRARY(code));\n");
-    fprintf(coutfp, "    cname = mndiag_%s_class_name(MNDIAG_GET_CLASS(code));\n", lib);
+    fprintf(coutfp, "    if (MNDIAG_GET_LIBRARY(code) == MNDIAG_LIBRARY_%s) {\n", libupper);
+    fprintf(coutfp, "        cname = mndiag_%s_class_name(MNDIAG_GET_CLASS(code));\n", lib);
+    fprintf(coutfp, "    } else {\n");
+    fprintf(coutfp, "        cname = \"...\";\n");
+    fprintf(coutfp, "    }\n");
     fprintf(coutfp, "    message = MNDIAG_GET_MESSAGE(code);\n");
     fprintf(coutfp, "    (void)snprintf(buf, sz, \"%%s:%%s+%%d[%%08x]\", lib, cname, message, code);\n");
     fprintf(coutfp, "}\n");
