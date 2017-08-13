@@ -10,6 +10,21 @@ const char *_malloc_options = "AJ";
 #endif
 
 static void
+print_code(int lcode, int ccode)
+{
+    printf("lcode=%04x ccode=%04x\n", lcode, ccode);
+    printf("% 5d=%08x\n", 0, MNDIAG_PUBLIC_CODE(lcode, ccode, 0));
+    printf("% 5d=%08x\n", 1, MNDIAG_PUBLIC_CODE(lcode, ccode, 1));
+    printf("% 5d=%08x\n", 128, MNDIAG_PUBLIC_CODE(lcode, ccode, 128));
+    printf("% 5d=%08x\n", 0x80, MNDIAG_PUBLIC_CODE(lcode, ccode, 0x80));
+    printf("% 5d=%08x\n", -128, MNDIAG_PUBLIC_CODE(lcode, ccode, -128));
+    printf("% 5d=%08x\n", -127, MNDIAG_PUBLIC_CODE(lcode, ccode, -127));
+    printf("% 5d=%08x\n", -2, MNDIAG_PUBLIC_CODE(lcode, ccode, -2));
+    printf("% 5d=%08x\n", -1, MNDIAG_PUBLIC_CODE(lcode, ccode, -1));
+}
+
+
+static void
 test0(void)
 {
     struct {
@@ -28,14 +43,10 @@ test0(void)
     /*
      * public code range in the "global" library space
      */
-    printf("% 5d=%08x\n", 0, MNDIAG_PUBLIC_CODE(-1, -1, 0));
-    printf("% 5d=%08x\n", 1, MNDIAG_PUBLIC_CODE(-1, -1, 1));
-    printf("% 5d=%08x\n", 8191, MNDIAG_PUBLIC_CODE(-1, -1, 8191));
-    printf("% 5d=%08x\n", 0x2000, MNDIAG_PUBLIC_CODE(-1, -1, 0x2000));
-    printf("% 5d=%08x\n", -8192, MNDIAG_PUBLIC_CODE(-1, -1, -8192));
-    printf("% 5d=%08x\n", -8191, MNDIAG_PUBLIC_CODE(-1, -1, -8191));
-    printf("% 5d=%08x\n", -2, MNDIAG_PUBLIC_CODE(-1, -1, -2));
-    printf("% 5d=%08x\n", -1, MNDIAG_PUBLIC_CODE(-1, -1, -1));
+    print_code(1, 1);
+    print_code(1, 1 << 9);
+    print_code(1 << 11, 1);
+    print_code(1 << 11, 1 << 9);
 }
 
 int

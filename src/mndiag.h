@@ -20,6 +20,15 @@ extern "C" {
  *
  * 0x40000000
  *   |_______ library public vs internal
+ *
+ * 0x3ffc0000
+ *   |||_____ library
+ *
+ * 0x0003ff00
+ *      |||__ class
+ *
+ * 0x000000ff
+ *         || message
  */
 
 /*
@@ -28,11 +37,11 @@ extern "C" {
 #define MNDIAG_SPEC_VERSION  (0x00000001)
 #define MNDIAG_BIT_GLOBAL    (1u << (sizeof(int) * 8 - 1))
 #define MNDIAG_BIT_PUBLIC    (1u << (sizeof(int) * 8 - 2))
-#define MNDIAG_MAX_LIBRARY   (0xffu)
-#define MNDIAG_SHF_LIBRARY   (sizeof(int) * 8 - 10)
-#define MNDIAG_MAX_CLASS     (0xffu)
-#define MNDIAG_SHF_CLASS     (sizeof(int) * 8 - 18)
-#define MNDIAG_MAX_MESSAGE   (0x3fffu)
+#define MNDIAG_MAX_LIBRARY   (0xfffu)
+#define MNDIAG_SHF_LIBRARY   (sizeof(int) * 8 - 14)
+#define MNDIAG_MAX_CLASS     (0x3ffu)
+#define MNDIAG_SHF_CLASS     (sizeof(int) * 8 - 24)
+#define MNDIAG_MAX_MESSAGE   (0xffu)
 #define MNDIAG_SHF_MESSAGE   (0)
 
 
