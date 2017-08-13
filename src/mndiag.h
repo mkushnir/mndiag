@@ -97,7 +97,7 @@ extern "C" {
 #define MNDIAG_LIBRARY_MRKLKIT      (0x19)
 #define MNDIAG_LIBRARY_QWE          (0xf0)
 
-#define MNDIAG_LIBRARY_OTHER        (0xff)
+#define MNDIAG_LIBRARY_GLOBAL       (0xff)
 
 
 typedef struct _mndiag_code_info {

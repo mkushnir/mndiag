@@ -32,6 +32,7 @@ typedef struct _mndiag_file_info {
     int fd;
 } mndiag_file_info_t;
 
+static int verbose;
 static char *cout;
 static char *hout;
 static char *lib;
@@ -51,6 +52,8 @@ static struct option optinfo[] = {
     {"lib", required_argument, NULL, 'L'},
 #define MNDIAGEN_OPT_CLIST      5
     {"clist", required_argument, NULL, 'S'},
+#define MNDIAGEN_OPT_VERBOSE    6
+    {"verbose", no_argument, NULL, 'v'},
     {NULL, 0, NULL, 0},
 };
 
@@ -66,6 +69,7 @@ usage(char *p)
 "  --clist=PATH|-sPATH          Class list. Required.\n"
 "  --hout=PATH|-HPATH           Output header. Default <libname>-diag.h.\n"
 "  --cout=PATH|-CPATH           Output source. Default <libname>-diag.c.\n"
+"  --verbose|-v                 Increase verbosity.\n"
 ,
         basename(p));
 }
@@ -97,11 +101,20 @@ symcmp(const char **a, const char **b)
 
 
 static void
-sym_validate(char *sym)
+sym_validate(char *sym, struct stat *clistsb, FILE *coutfp, FILE *houtfp)
 {
     static char *buf;
     size_t symlen;
     mndiag_file_info_t *f;
+    struct stat coutsb, houtsb;
+
+    if (fstat(fileno(coutfp), &coutsb) != 0) {
+        return;
+    }
+
+    if (fstat(fileno(houtfp), &houtsb) != 0) {
+        return;
+    }
 
     symlen = strlen(sym);
 
@@ -111,6 +124,19 @@ sym_validate(char *sym)
         } else {
             ssize_t nread;
             char *p;
+
+            if (f->sb.st_ino == coutsb.st_ino) {
+                continue;
+                printf("f->sb.st_ino=%d for file cout\n", f->sb.st_ino);
+            }
+            if (f->sb.st_ino == houtsb.st_ino) {
+                continue;
+                printf("f->sb.st_ino=%d for file hout\n", f->sb.st_ino);
+            }
+            if (f->sb.st_ino == clistsb->st_ino) {
+                continue;
+                printf("f->sb.st_ino=%d for file clist\n", f->sb.st_ino);
+            }
 
             if ((buf = realloc(buf, f->sb.st_size + 1)) == NULL) {
                 errx(1, "realloc");
@@ -144,6 +170,9 @@ sym_validate(char *sym)
         }
     }
     // not found
+    if (verbose >= 1) {
+        fprintf(stderr, "Skipping %s (not found in files)\n", sym);
+    }
     *sym = '\0';
 
 end:
@@ -167,15 +196,14 @@ end:
 
 static void
 clist_write(const char *lib,
-            const char *cout,
-            const char *hout,
+            FILE *coutfp,
+            FILE *houtfp,
             char **syms,
             int symlen)
 {
     int i, j;
     char *p;
     char *libupper;
-    FILE *coutfp, *houtfp;
 
 
     if ((libupper = strdup(lib)) == NULL) {
@@ -183,13 +211,6 @@ clist_write(const char *lib,
     }
     for (p = libupper; *p != '\0'; ++p) {
         *p = toupper(*p);
-    }
-
-    if ((coutfp = fopen(cout, "w")) == NULL) {
-        errx(1, "fopen");
-    }
-    if ((houtfp = fopen(hout, "w")) == NULL) {
-        errx(1, "fopen");
     }
 
     //printf("lib=%s cout=%s hout=%s\n", lib, cout, hout);
@@ -293,8 +314,6 @@ clist_write(const char *lib,
     fprintf(coutfp, "}\n");
 
 
-    fclose(coutfp);
-    fclose(houtfp);
 }
 
 
@@ -310,6 +329,7 @@ clist_do(const char *path,
     char *s0, *s1;
     int i, n;
     char **syms;
+    FILE *coutfp, *houtfp;
 
     if (lstat(path, &sb) != 0) {
         errx(1, "lstat error");
@@ -352,13 +372,23 @@ clist_do(const char *path,
           (int(*)(const void *, const void *))symcmp);
 
 
+    if ((coutfp = fopen(cout, "w")) == NULL) {
+        errx(1, "fopen");
+    }
+    if ((houtfp = fopen(hout, "w")) == NULL) {
+        errx(1, "fopen");
+    }
+
     for (i = 0; i < n; ++i) {
         if (strlen(syms[i]) > 0) {
-            sym_validate(syms[i]);
+            sym_validate(syms[i], &sb, coutfp, houtfp);
         }
     }
 
-    clist_write(lib, cout, hout, syms, n);
+    clist_write(lib, coutfp, houtfp, syms, n);
+
+    fclose(coutfp);
+    fclose(houtfp);
 }
 
 
@@ -386,7 +416,7 @@ main(int argc, char **argv)
 #   endif
 #endif
 
-    while ((ch = getopt_long(argc, argv, "C:H:hL:S:", optinfo, &idx)) != -1) {
+    while ((ch = getopt_long(argc, argv, "C:H:hL:S:v", optinfo, &idx)) != -1) {
         switch (ch) {
         case 'h':
             usage(argv[0]);
@@ -407,6 +437,10 @@ main(int argc, char **argv)
 
         case 'S':
             clist = strdup(optarg);
+            break;
+
+        case 'v':
+            ++verbose;
             break;
 
         default:
