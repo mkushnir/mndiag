@@ -103,7 +103,7 @@ symcmp(const char **a, const char **b)
 static void
 sym_validate(char *sym, struct stat *clistsb, FILE *coutfp, FILE *houtfp)
 {
-    static char *buf;
+    static char *buf = NULL;
     size_t symlen;
     mndiag_file_info_t *f;
     struct stat coutsb, houtsb;
@@ -138,6 +138,7 @@ sym_validate(char *sym, struct stat *clistsb, FILE *coutfp, FILE *houtfp)
                 printf("f->sb.st_ino=%d for file clist\n", (unsigned)f->sb.st_ino);
             }
 
+            fprintf(stderr, "f->sb.st_size=%zd", f->sb.st_size);
             if ((buf = realloc(buf, f->sb.st_size + 1)) == NULL) {
                 errx(1, "realloc");
             }
@@ -179,19 +180,6 @@ end:
     ;
     //printf("sorted %s\n", sym);
 }
-
-
-//void
-//mndiag_local_str(int code, char *buf, size_t sz)
-//{
-//    const char *lib;
-//    const char *class;
-//    int message;
-//    lib = mndiag_library_name(MNDIAG_GET_LIBRARY(code));
-//    class = mndiag_local_class_name(MNDIAG_GET_CLASS(code));
-//    message = MNDIAG_GET_MESSAGE(code);
-//    (void)snprintf(buf, sz, "%s:%s+%d[%08x]", lib, class, message, code);
-//}
 
 
 static void
@@ -393,6 +381,7 @@ clist_do(const char *path,
 
     fclose(coutfp);
     fclose(houtfp);
+    free(buf);
 }
 
 
@@ -402,9 +391,6 @@ main(int argc, char **argv)
     int i;
     int ch;
     int idx;
-    //int libid;
-    //char *libidsym;
-
 
 #ifdef HAVE_MALLOC_H
 #   ifndef NDEBUG
