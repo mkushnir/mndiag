@@ -127,15 +127,15 @@ sym_validate(char *sym, struct stat *clistsb, FILE *coutfp, FILE *houtfp)
 
             if (f->sb.st_ino == coutsb.st_ino) {
                 continue;
-                printf("f->sb.st_ino=%d for file cout\n", f->sb.st_ino);
+                printf("f->sb.st_ino=%d for file cout\n", (unsigned)f->sb.st_ino);
             }
             if (f->sb.st_ino == houtsb.st_ino) {
                 continue;
-                printf("f->sb.st_ino=%d for file hout\n", f->sb.st_ino);
+                printf("f->sb.st_ino=%d for file hout\n", (unsigned)f->sb.st_ino);
             }
             if (f->sb.st_ino == clistsb->st_ino) {
                 continue;
-                printf("f->sb.st_ino=%d for file clist\n", f->sb.st_ino);
+                printf("f->sb.st_ino=%d for file clist\n", (unsigned)f->sb.st_ino);
             }
 
             if ((buf = realloc(buf, f->sb.st_size + 1)) == NULL) {

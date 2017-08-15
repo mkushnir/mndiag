@@ -11,10 +11,11 @@
 #   include <malloc.h>
 #endif
 
-#include <mrkcommon/dumpm.h>
-#include <mrkcommon/util.h>
+//#include <mrkcommon/dumpm.h>
+//#include <mrkcommon/util.h>
 
 #define FAIL(s) do {perror(s); abort(); } while (0)
+#define UNUSED __attribute__((unused))
 
 #ifndef NDEBUG
 const char *_malloc_options = "AJ";
@@ -106,7 +107,7 @@ main(UNUSED int argc, char **argv)
     while ((ch = getopt_long(argc, argv, "f:hn", longopts, NULL)) != -1) {
         switch (ch) {
         case 'f':
-            TRACE("file: %s", optarg);
+            fprintf(stderr, "file: %s\n", optarg);
             break;
 
         case 'h':
@@ -115,7 +116,7 @@ main(UNUSED int argc, char **argv)
             break;
 
         case 'n':
-            TRACE("Dry run");
+            fprintf(stderr, "Dry run\n");
             break;
 
         case ':':
