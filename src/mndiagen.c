@@ -309,7 +309,7 @@ clist_do(const char *path,
          const char *hout)
 {
     struct stat sb;
-    char *buf;
+    char *buf = NULL;
     int fd;
     char *s0, *s1;
     int i, n;
@@ -322,7 +322,7 @@ clist_do(const char *path,
     if ((fd = open(path, O_RDONLY)) < 0) {
         errx(1, "open");
     }
-    if ((buf = malloc(sb.st_size) + 1) == NULL) {
+    if ((buf = malloc(sb.st_size + 1)) == NULL) {
         errx(1, "malloc");
     }
     if (read(fd, buf, sb.st_size) < 0) {
