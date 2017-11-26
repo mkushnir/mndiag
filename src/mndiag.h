@@ -22,7 +22,7 @@ extern "C" {
  *   |_______ library public vs internal
  *
  * 0x3ffc0000
- *   |||_____ library
+ *   ||||____ library
  *
  * 0x0003ff00
  *      |||__ class
