@@ -108,6 +108,11 @@ sym_validate(char *sym, struct stat *clistsb, FILE *coutfp, FILE *houtfp)
     mndiag_file_info_t *f;
     struct stat coutsb, houtsb;
 
+    if (strchr(sym, ':') != NULL) {
+        //printf("special: ");
+        goto end;
+    }
+
     if (fstat(fileno(coutfp), &coutsb) != 0) {
         return;
     }
@@ -214,12 +219,25 @@ clist_write(const char *lib,
 
     for (i = 0, j = 1; i < symlen; ++i) {
         if (strlen(syms[i]) > 0) {
+            char *s = syms[i], *colon;
+            int val;
+
+            if ((colon = strchr(s, ':')) != NULL) {
+                *colon = '\0';
+                ++colon;
+                val = strtol(colon, NULL, 10);
+            } else {
+                val = j;
+                ++j;
+            }
+
 
             fprintf(houtfp,
                     "#define MNDIAG_CLASS_%s_%s (%d)\n",
                     libupper,
                     syms[i],
-                    j);
+                    val);
+
             fprintf(houtfp,
                     "#define %s MNDIAG_INTERNAL_CODE(MNDIAG_LIBRARY_%s, "
                     "MNDIAG_CLASS_%s_%s, 0)\n",
@@ -232,7 +250,8 @@ clist_write(const char *lib,
                     "#define MNDIAG_CLASS_%s_%s (%d)\n",
                     libupper,
                     syms[i],
-                    j);
+                    val);
+
             fprintf(coutfp,
                     "#define %s MNDIAG_INTERNAL_CODE(MNDIAG_LIBRARY_%s, "
                     "MNDIAG_CLASS_%s_%s, 0)\n",
@@ -240,7 +259,6 @@ clist_write(const char *lib,
                     libupper,
                     libupper,
                     syms[i]);
-
 
             fprintf(coutfp,
                     "   {\"%s\", \"%s\", MNDIAG_CLASS_%s_%s},\n",
@@ -248,8 +266,6 @@ clist_write(const char *lib,
                     syms[i],
                     libupper,
                     syms[i]);
-
-            ++j;
         }
     }
 
