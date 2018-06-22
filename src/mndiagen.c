@@ -352,6 +352,7 @@ clist_do(const char *path,
          s0 = ++s1, s1 = strchr(s0, '\n')) {
         ++n;
     }
+    ++n;
     //printf("n=%d\n", n);
 
     if ((syms = malloc(sizeof(char *) * n)) == NULL) {
