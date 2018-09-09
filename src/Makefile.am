@@ -15,6 +15,7 @@ lib_LTLIBRARIES = libmndiag.la
 bin_PROGRAMS = mndiagen
 
 nobase_include_HEADERS = mndiag.h
+noinst_HEADERS = mndiag_private.h
 
 libmndiag_la_SOURCES = mndiag.c
 
