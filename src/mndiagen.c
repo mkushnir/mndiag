@@ -246,6 +246,14 @@ clist_write(const char *lib,
                     libupper,
                     syms[i]);
 
+            fprintf(houtfp,
+                    "#define MSG_%s(m) MNDIAG_INTERNAL_CODE(MNDIAG_LIBRARY_%s, "
+                    "MNDIAG_CLASS_%s_%s, (m))\n",
+                    syms[i],
+                    libupper,
+                    libupper,
+                    syms[i]);
+
             fprintf(coutfp,
                     "#define MNDIAG_CLASS_%s_%s (%d)\n",
                     libupper,
@@ -391,6 +399,7 @@ clist_do(const char *path,
 
     fclose(coutfp);
     fclose(houtfp);
+    free(syms);
     free(buf);
 }
 
@@ -496,8 +505,9 @@ main(int argc, char **argv)
         if (lstat(f->path, &f->sb) != 0) {
             continue;
         }
-        if ((f->fd = open(f->path, O_RDONLY)) != -1) {
-            continue;
+        if ((f->fd = open(f->path, O_RDONLY)) == -1) {
+            /* will be taken care of */
+            //continue;
         }
     }
     mndiag_file_info_t *f = file_infos + i;
