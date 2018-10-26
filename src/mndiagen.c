@@ -36,6 +36,7 @@ static int verbose;
 static char *cout;
 static char *hout;
 static char *lib;
+static unsigned long libcode = 0;
 static char *clist;
 static mndiag_file_info_t *file_infos;
 
@@ -65,7 +66,8 @@ usage(char *p)
 "\n"
 "Options:\n"
 "  --help|-h                    Show this message and exit.\n"
-"  --lib=NAME|-LNAME            Library name. Required.\n"
+"  --lib=NAME[:CODE]|-LNAME[:CODE]\n"
+"                               Library name. Required.\n"
 "  --clist=PATH|-sPATH          Class list. Required.\n"
 "  --hout=PATH|-HPATH           Output header. Default <libname>-diag.h.\n"
 "  --cout=PATH|-CPATH           Output source. Default <libname>-diag.c.\n"
@@ -186,6 +188,7 @@ end:
 
 static void
 clist_write(const char *lib,
+            unsigned long libcode,
             FILE *coutfp,
             FILE *houtfp,
             char **syms,
@@ -238,6 +241,13 @@ clist_write(const char *lib,
                     syms[i],
                     val);
 
+            if (libcode > 0) {
+                fprintf(houtfp,
+                        "#define MNDIAG_LIBRARY_%s (0x%02x)\n",
+                        libupper,
+                        (unsigned)libcode);
+            }
+
             fprintf(houtfp,
                     "#define %s MNDIAG_INTERNAL_CODE(MNDIAG_LIBRARY_%s, "
                     "MNDIAG_CLASS_%s_%s, 0)\n",
@@ -259,6 +269,13 @@ clist_write(const char *lib,
                     libupper,
                     syms[i],
                     val);
+
+            if (libcode > 0) {
+                fprintf(coutfp,
+                        "#define MNDIAG_LIBRARY_%s (0x%02x)\n",
+                        libupper,
+                        (unsigned)libcode);
+            }
 
             fprintf(coutfp,
                     "#define %s MNDIAG_INTERNAL_CODE(MNDIAG_LIBRARY_%s, "
@@ -395,7 +412,7 @@ clist_do(const char *path,
         }
     }
 
-    clist_write(lib, coutfp, houtfp, syms, n);
+    clist_write(lib, libcode, coutfp, houtfp, syms, n);
 
     fclose(coutfp);
     fclose(houtfp);
@@ -441,7 +458,21 @@ main(int argc, char **argv)
             break;
 
         case 'L':
-            lib = strdup(optarg);
+            {
+                char *colon;
+                lib = strdup(optarg);
+                if ((colon = strchr(lib, ':')) != NULL) {
+                    *colon = '\0';
+                    ++colon;
+                    libcode = strtoul(colon, NULL, 10);
+                    if (libcode > MNDIAG_LIBRARY_GLOBAL || libcode <= 0x80) {
+                        errx(1,
+                            "Invalid --lib code parameter.  "
+                            "Expected in the rage 0x81..%x",
+                            MNDIAG_LIBRARY_GLOBAL);
+                    }
+                }
+            }
             break;
 
         case 'S':
