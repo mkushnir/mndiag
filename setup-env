@@ -2,10 +2,7 @@
 
 # On Linux: apt-get install autotools-dev autoconf libtool
 #
-if test "$1" = "init"
-then
-    export LDFLAGS="-L$HOME/lib -L/usr/local/lib"
-    export CFLAGS="-I$HOME/include -I/usr/local/include"
+do_init() {
     #autoreconf --force --install
     autoreconf --force
     aclocal
@@ -16,20 +13,82 @@ then
     make distclean
     autoreconf
     ./configure --prefix=$HOME --enable-debug
+}
+
+do_dev() {
+    autoreconf --force
+    ./configure --prefix=$HOME --enable-debug
+}
+
+do_dev_static() {
+    autoreconf --force
+    ./configure --prefix=$HOME --enable-debug --enable-allstatic
+}
+
+do_dev_ndebug() {
+    autoreconf --force
+    ./configure --prefix=$HOME
+}
+
+do_dev_ndebug_static() {
+    autoreconf --force
+    ./configure --prefix=$HOME --enable-allstatic --enable-lto
+}
+
+dirs="."
+#dirs="third-party/mndiag third-party/mrkcommon third-party/mrkl4c ."
+R=`pwd -P`
+
+LDFLAGS=
+for i in $dirs
+do
+    LDFLAGS="$LDFLAGS -L${R}/$i/src/.libs"
+done
+LDFLAGS="$LDFLAGS -L$HOME/lib -L/usr/local/lib"
+export LDFLAGS
+
+CFLAGS=
+for i in $dirs
+do
+    CFLAGS="$CFLAGS -I${R}/$i/src"
+done
+CFLAGS="$CFLAGS -I$HOME/include -I/usr/local/include"
+export CFLAGS
+
+if test "$1" = "init"
+then
+    for i in $dirs
+    do
+        ( cd $i && do_init )
+    done
 
 elif test "$1" = "dev"
 then
-    export LDFLAGS="-L$HOME/lib -L/usr/local/lib"
-    export CFLAGS="-I$HOME/include -I/usr/local/include"
-    autoreconf --force
-    ./configure --prefix=$HOME --enable-debug
+    for i in $dirs
+    do
+        ( cd $i && do_dev )
+    done
+
+elif test "$1" = "dev-static"
+then
+    for i in $dirs
+    do
+        ( cd $i && do_dev_static )
+    done
 
 elif test "$1" = "dev-ndebug"
 then
-    export LDFLAGS="-L$HOME/lib -L/usr/local/lib"
-    export CFLAGS="-I$HOME/include -I/usr/local/include"
-    autoreconf --force
-    ./configure --prefix=$HOME
+    for i in $dirs
+    do
+        ( cd $i && do_dev_ndebug )
+    done
+
+elif test "$1" = "dev-ndebug-static"
+then
+    for i in $dirs
+    do
+        ( cd $i && do_dev_ndebug_static )
+    done
 
 elif test "$1" = "dist"
 then
