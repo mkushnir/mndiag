@@ -104,6 +104,7 @@ extern "C" {
 #define MNDIAG_LIBRARY_MRKSVNUP     (0x17)
 #define MNDIAG_LIBRARY_MNSPINFO     (0x18)
 #define MNDIAG_LIBRARY_MRKLKIT      (0x19)
+#define MNDIAG_LIBRARY_MNLIPC       (0x1a)
 #define MNDIAG_LIBRARY_QWE          (0xf0)
 
 #define MNDIAG_LIBRARY_GLOBAL       (0xff)
