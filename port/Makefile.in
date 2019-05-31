@@ -7,7 +7,7 @@ MASTER_SITES=	file:///data0/mkushnir/distfiles
 PKGORIGIN=	${PKGCATEGORY}/${PORTNAME}
 
 MAINTAINER=	markiyan.kushnir@gmail.com
-COMMENT=	Markiyan\'s bhyve Manager
+COMMENT=	Markiyan\'s diagnostics registry
 LICENSE=	BSD2CLAUSE
 
 DISTDIR=/data0/mkushnir/distfiles
