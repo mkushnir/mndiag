@@ -96,6 +96,7 @@ then
     unset CFLAGS
     autoreconf --force
     ./configure
+    make dist
 
     if test -d port
     then
@@ -103,11 +104,11 @@ then
         then
             truncate -s0 port/distinfo
         fi
-        if test -d /data2/mkushnir/distfiles
+        if test -d /data0/mkushnir/distfiles
         then
             for i in *.tar.gz
             do
-                cp -v $i /data2/mkushnir/distfiles/
+                cp -v $i /data0/mkushnir/distfiles/
                 if test -f port/distinfo
                 then
                     /sbin/sha256 $i >port/distinfo
