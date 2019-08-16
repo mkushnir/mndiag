@@ -115,6 +115,18 @@ AC_ARG_WITH(cmocka,
 
 AM_CONDITIONAL([CMOCKA], [test "$with_cmocka" = "yes"])
 
+AC_ARG_WITH(devtools,
+            AC_HELP_STRING([--with-devtools],
+            [Build development tools (default=yes)]),
+            [],
+            [with_devtools=yes])
+
+AS_IF([test "$with_devtools" = "yes"],
+      [AC_MSG_NOTICE([Will build devtools])],
+      [AC_MSG_NOTICE([Will not build devtools])])
+
+AM_CONDITIONAL([DEVTOOLS], [test "$with_devtools" = "yes"])
+
 AM_CONDITIONAL([LINUX], [echo $build_os | grep linux >/dev/null])
 AM_CONDITIONAL([FREEBSD], [echo $build_os | grep freebsd >/dev/null])
 AM_CONDITIONAL([DARWIN], [echo $build_os | grep darwin >/dev/null])
