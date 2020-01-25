@@ -11,8 +11,8 @@
 #   include <malloc.h>
 #endif
 
-//#include <mrkcommon/dumpm.h>
-//#include <mrkcommon/util.h>
+//#include <mncommon/dumpm.h>
+//#include <mncommon/util.h>
 
 #define FAIL(s) do {perror(s); abort(); } while (0)
 #define UNUSED __attribute__((unused))
@@ -55,7 +55,7 @@ UNUSED
 static void
 myinfo(UNUSED int sig)
 {
-    //mrkthr_dump_all_ctxes();
+    //mnthr_dump_all_ctxes();
 }
 
 

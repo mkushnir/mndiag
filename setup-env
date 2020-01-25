@@ -58,7 +58,7 @@ do_dev_ndebug_static() {
 }
 
 dirs="."
-#dirs="third-party/mndiag third-party/mrkcommon third-party/mrkl4c ."
+#dirs="third-party/mndiag third-party/mncommon third-party/mnl4c ."
 R=`pwd -P`
 
 LDFLAGS=

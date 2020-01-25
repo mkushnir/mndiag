@@ -53,7 +53,7 @@ libmndiag_la_CFLAGS = $(DEBUG_CC_FLAGS) -Wall -Wextra -Werror -std=c99 @_GNU_SOU
 
 libmndiag_la_LDFLAGS += $(DEBUG_LD_FLAGS) -version-info 0:0:0 -L$(libdir)
 libmndiag_la_LIBADD =
-#libmndiag_la_LDFLAGS = -version-info 0:0:0 -L$(libdir) -lmrkcommon
+#libmndiag_la_LDFLAGS = -version-info 0:0:0 -L$(libdir) -lmncommon
 #libmndiag_la_LDFLAGS = -all-static
 #libmndiag_la_LDFLAGS = -all-static -Wl,-Bdynamic,-L$(libdir),-lfoo -lqwe,-Bstatic
 
