@@ -9,6 +9,7 @@
 CLEANFILES = *.core core
 #CLEANFILES += *.in
 AM_MAKEFLAGS = -s
+AM_LIBTOOLFLAGS = --silent
 
 lib_LTLIBRARIES = libmndiag.la
 
