@@ -449,12 +449,12 @@ main(int argc, char **argv)
     /*
      * malloc options
      */
-    if (mallopt(M_CHECK_ACTION, 1) != 1) {
-        FAIL("mallopt");
-    }
-    if (mallopt(M_PERTURB, 0x5a) != 1) {
-        FAIL("mallopt");
-    }
+    //if (mallopt(M_CHECK_ACTION, 1) != 1) {
+    //    FAIL("mallopt");
+    //}
+    //if (mallopt(M_PERTURB, 0x5a) != 1) {
+    //    FAIL("mallopt");
+    //}
 #   endif
 #endif
 
