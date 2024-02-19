@@ -104,7 +104,7 @@ main(UNUSED int argc, char **argv)
 #endif
 
 
-    while ((ch = getopt_long(argc, argv, "f:hn", longopts, NULL)) != -1) {
+    while ((ch = getopt_long(argc, argv, "f:hn", longopts, NULL)) != ((char)-1)) {
         switch (ch) {
         case 'f':
             fprintf(stderr, "file: %s\n", optarg);
