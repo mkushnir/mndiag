@@ -1,4 +1,4 @@
-AC_INIT(mndiag, 0.1, markiyan.kushnir@gmail.com, mndiag, https://github.com/mkushnir)
+AC_INIT([mndiag],[0.1],[markiyan.kushnir@gmail.com],[mndiag],[https://github.com/mkushnir])
 
 AS_IF([test -n "$USE_GCC"],
 [
@@ -94,36 +94,31 @@ AC_CHECK_HEADER_STDBOOL
 AC_PRESERVE_HELP_ORDER
 
 AC_ARG_ENABLE(debug,
-              AC_HELP_STRING([--enable-debug],
-                             [Enable debug build (default=no)]))
+              AS_HELP_STRING([--enable-debug],[Enable debug build (default=no)]))
 
 AM_CONDITIONAL([DEBUG], [test "$enable_debug" = "yes"])
 
 AC_ARG_ENABLE(allstatic,
-              AC_HELP_STRING([--enable-allstatic],
-                             [Enable all static build (default=no)]),
+              AS_HELP_STRING([--enable-allstatic],[Enable all static build (default=no)]),
               [AC_MSG_NOTICE([Will build statically])],
               [AC_MSG_NOTICE([Will not build statically])])
 
 AM_CONDITIONAL([ALLSTATIC], [test "$enable_allstatic" = "yes"])
 
 AC_ARG_ENABLE(lto,
-              AC_HELP_STRING([--enable-lto],
-                             [Enable all static build (default=no)]),
+              AS_HELP_STRING([--enable-lto],[Enable all static build (default=no)]),
               [AC_MSG_NOTICE([Will enable LTO])],
               [AC_MSG_NOTICE([Will not enable LTO])])
 
 AM_CONDITIONAL([LTO], [test "$enable_lto" = "yes"])
 
 AC_ARG_WITH(cmocka,
-            AC_HELP_STRING([--with-cmocka],
-            [Build CMocka tests (default=no)]))
+            AS_HELP_STRING([--with-cmocka],[Build CMocka tests (default=no)]))
 
 AM_CONDITIONAL([CMOCKA], [test "$with_cmocka" = "yes"])
 
 AC_ARG_WITH(devtools,
-            AC_HELP_STRING([--with-devtools],
-            [Build development tools (default=yes)]),
+            AS_HELP_STRING([--with-devtools],[Build development tools (default=yes)]),
             [],
             [with_devtools=yes])
 
